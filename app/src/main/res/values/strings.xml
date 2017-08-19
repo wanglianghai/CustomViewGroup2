@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">scrollerdemo</string>
+    <string name="scroll">我滚</string>
+    <string name="scroll_by">scroll_by</string>
+    <string name="scroll_to">scroll_to</string>
+</resources>
