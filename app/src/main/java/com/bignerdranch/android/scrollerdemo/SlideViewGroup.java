@@ -108,19 +108,24 @@ public class SlideViewGroup extends ViewGroup {
 
             case MotionEvent.ACTION_UP:
 
-                if (getScrollX() <= 0) {
-                    scrollBy(-getScrollX(), 0);
+                if (getScrollX() < mHideViewWidth / 3) {
+                    //scrollBy(-getScrollX(), 0);
+                    mScroller.startScroll(getScrollX(), 0, -getScrollX(), 0);
                 } else {
-                    Log.i(TAG, "onTouchEvent: " + getScrollX() + " " + mHideViewWidth);
-                    if (getScrollX() < mHideViewWidth / 3) {
-                        scrollBy(-getScrollX(), 0);
-                    } else {
-                        scrollBy((int) (mHideViewWidth - getScrollX()), 0);
-                    }
+                    mScroller.startScroll(getScrollX(), 0, (int) (mHideViewWidth - getScrollX()), 0);
                 }
 
+                invalidate();
                 break;
         }
         return super.onTouchEvent(event);
+    }
+
+    @Override
+    public void computeScroll() {
+        if (mScroller.computeScrollOffset()) {
+            scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
+            invalidate();
+        }
     }
 }

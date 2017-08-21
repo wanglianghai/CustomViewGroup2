@@ -19,6 +19,7 @@ public class EasySwipeMeunLayout extends ViewGroup {
     private int mScaledTouchSlop;
     private int mContentWidth;
     private float lastx;
+    //用来创建scroller动画
     private Scroller mScroller;
     private int mRightMenuWidths;
 
@@ -124,22 +125,21 @@ public class EasySwipeMeunLayout extends ViewGroup {
             }
             case MotionEvent.ACTION_UP:
                 //getScrollX()左屏幕边界为原点，左正右负，用系统的，直接算的有误差
+                //而且用边界算方便
                 //Log.i(TAG, "onTouchEvent: " + getScrollX());
                 if (getScrollX() <= 0) {
                     //对右边界进行处理，不让其滑出
-                    //mScroller.startScroll(getScrollX(), 0, -getScrollX(), 0);
-                    scrollBy(-getScrollX(), 0);
+                    mScroller.startScroll(getScrollX(), 0, -getScrollX(), 0);
                 } else if (getScrollX() > 0 && getScrollX() >= mRightMenuWidths / 3) {
                     //删除按钮滑出区域大于1／3，滑出删除按钮
-                    scrollBy(mRightMenuWidths-getScrollX(), 0);
-
+                    mScroller.startScroll(getScrollX(), 0, mRightMenuWidths - getScrollX(), 0);
                 } else {
                     //删除按钮滑出区域小于1／3，滑回原来的位置
-                    scrollBy(-getScrollX(), 0);
+                    mScroller.startScroll(getScrollX(), 0, -getScrollX(), 0);
 
                 }
                 //有动画要重绘
-                //invalidate();
+                invalidate();
                 //通知View重绘-invalidate()->onDraw()->computeScroll()
 
                 break;
@@ -147,13 +147,13 @@ public class EasySwipeMeunLayout extends ViewGroup {
         return super.onTouchEvent(event);
     }
 
-    /*@Override
+    @Override
     public void computeScroll() {
         //判断Scroller是否执行完毕：
         if (mScroller.computeScrollOffset()) {
-            scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
+//            scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
             //通知View重绘-invalidate()->onDraw()->computeScroll()
             invalidate();
         }
-    }*/
+    }
 }
