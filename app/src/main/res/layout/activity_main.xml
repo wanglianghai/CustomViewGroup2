@@ -7,7 +7,25 @@
     android:orientation="vertical"
     tools:context="com.bignerdranch.android.scrollerdemo.MainActivity">
 
-    <LinearLayout
+    <!--PageView-->
+    <!--<com.bignerdranch.android.scrollerdemo.PageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/integer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <ListView
+            android:id="@+id/letter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.bignerdranch.android.scrollerdemo.PageView>-->
+
+
+    <!--下面是EasySwipeMenuLayout,SlideViewGroup&ndash;&gt;-->
+    <!--<LinearLayout
         android:id="@+id/parent_view"
         android:background="@android:color/darker_gray"
         android:layout_width="match_parent"
@@ -68,5 +86,5 @@
             android:text="删除"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
-    </com.bignerdranch.android.scrollerdemo.EasySwipeMeunLayout>
+    </com.bignerdranch.android.scrollerdemo.EasySwipeMeunLayout>-->
 </LinearLayout>
