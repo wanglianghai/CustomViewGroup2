@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
@@ -16,12 +17,11 @@ import android.widget.Scroller;
 public class SlideViewGroup extends ViewGroup {
     private static final String TAG = "SlideViewGroup";
     private Scroller mScroller;
+    private VelocityTracker mVelocity;
 
     private int mScaledTouchSlop;
     private float mHideViewWidth;
-    private float firstX;
     private float lastX;
-    float all;
     public SlideViewGroup(Context context) {
         this(context, null);
     }
@@ -41,6 +41,7 @@ public class SlideViewGroup extends ViewGroup {
         ViewConfiguration viewConfiguration = ViewConfiguration.get(context);
         mScaledTouchSlop = viewConfiguration.getScaledTouchSlop();
         mScroller = new Scroller(context);
+        mVelocity = VelocityTracker.obtain();
     }
 
     @Override
@@ -81,7 +82,6 @@ public class SlideViewGroup extends ViewGroup {
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 lastX = ev.getRawX();
-                firstX = ev.getRawX();
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (Math.abs(ev.getRawX() - lastX) > mScaledTouchSlop) {
@@ -97,7 +97,8 @@ public class SlideViewGroup extends ViewGroup {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
+        mVelocity.addMovement(event);
+        mVelocity.computeCurrentVelocity(1000);
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:
                 //小于0向左
@@ -107,8 +108,9 @@ public class SlideViewGroup extends ViewGroup {
                 break;
 
             case MotionEvent.ACTION_UP:
-
-                if (getScrollX() < mHideViewWidth / 3) {
+                float velocity = mVelocity.getXVelocity();
+                Log.i(TAG, "onTouchEvent velocity: " + velocity);
+                if ((getScrollX() < mHideViewWidth / 3 || velocity > 100) && velocity > -100) {
                     //scrollBy(-getScrollX(), 0);
                     mScroller.startScroll(getScrollX(), 0, -getScrollX(), 0);
                 } else {
