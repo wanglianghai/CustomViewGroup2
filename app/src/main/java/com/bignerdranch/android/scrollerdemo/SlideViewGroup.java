@@ -18,6 +18,7 @@ public class SlideViewGroup extends ViewGroup {
     private static final String TAG = "SlideViewGroup";
     private Scroller mScroller;
     private VelocityTracker mVelocity;
+    private static SlideViewGroup mAdvanceSlide;
 
     private int mScaledTouchSlop;
     private float mHideViewWidth;
@@ -101,6 +102,9 @@ public class SlideViewGroup extends ViewGroup {
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:
                 //小于0向左
+                if (mAdvanceSlide != null) {
+                    mAdvanceSlide.close();
+                }
                 float distance = event.getRawX() - lastX;
                 lastX = event.getRawX();
                 scrollBy((int) -distance, 0);
@@ -108,6 +112,7 @@ public class SlideViewGroup extends ViewGroup {
 
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
+                mAdvanceSlide = this;
                 float velocity = mVelocity.getXVelocity();
                 Log.i(TAG, "onTouchEvent velocity: " + velocity);
                 if ((getScrollX() < mHideViewWidth / 3 || velocity > 100) && velocity > -100) {
@@ -118,6 +123,7 @@ public class SlideViewGroup extends ViewGroup {
                 }
 
                 invalidate();
+                //通知View重绘-invalidate()->onDraw()->computeScroll()
                 break;
         }
         return super.onTouchEvent(event);
@@ -129,5 +135,10 @@ public class SlideViewGroup extends ViewGroup {
             scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
             invalidate();
         }
+    }
+
+    private void close() {
+        mScroller.startScroll(getScrollX(), 0, -getScrollX(), 0);
+        invalidate();
     }
 }
