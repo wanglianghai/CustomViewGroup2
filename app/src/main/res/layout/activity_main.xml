@@ -7,6 +7,10 @@
     android:orientation="vertical"
     tools:context="com.bignerdranch.android.scrollerdemo.MainActivity">
 
+    <com.bignerdranch.android.scrollerdemo.MyRecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <!--PageView-->
     <!--<com.bignerdranch.android.scrollerdemo.PageView
         android:layout_width="match_parent"

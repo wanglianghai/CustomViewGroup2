@@ -48,7 +48,7 @@ public class SlideViewGroup extends ViewGroup {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        int width = 0, height = 0, childCount;
+        int width = 0, height = MeasureSpec.getSize(heightMeasureSpec), childCount;
         childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
             View childView = getChildAt(i);
@@ -59,7 +59,6 @@ public class SlideViewGroup extends ViewGroup {
             if (i == 1) {
                 mHideViewWidth = childView.getMeasuredWidth();
             }
-            height = childView.getHeight();
         }
         setMeasuredDimension(width, height);
     }
@@ -107,6 +106,7 @@ public class SlideViewGroup extends ViewGroup {
                 scrollBy((int) -distance, 0);
                 break;
 
+            case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
                 float velocity = mVelocity.getXVelocity();
                 Log.i(TAG, "onTouchEvent velocity: " + velocity);
