@@ -37,6 +37,15 @@ public class MyRecyclerView extends RecyclerView {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent e) {
+        switch (e.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                downY = e.getRawY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (Math.abs(downY - e.getRawY()) < 150) {
+                    return false;
+                }
+        }
         return super.onInterceptTouchEvent(e);
     }
 }
